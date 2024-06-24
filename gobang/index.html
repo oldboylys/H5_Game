@@ -99,9 +99,8 @@
             endGame = checkVertical(i,j) || checkHorizontal(i,j) || checkleft(i,j)|| checkright(i,j);
             if(endGame) {
                 //阻止继续下棋，重新开棋
-                Tips.innerHTML = isBlack?'黑子赢咯':'白衣赢咯';
                 setTimeout(() => {
-                    alert('点机确定刷新页面，重新开局');
+                    alert(`${isBlack?'白衣赢咯':'小黑子赢咯'}~点机确定刷新页面，重新开局`);
                     history.go(0)
                     return;
                 }, 300);

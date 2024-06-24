@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋</title>
+</head>
+<body>
+    <style>
+        canvas {
+            background-color: #79797c;
+            display: block;
+            border-radius: 45px;
+            box-shadow: 10px 10px 10px 10px #433f3f;
+        }
+    </style>
+    <script>
+        let endGame = false;
+        let canvas = document.createElement('canvas')
+        canvas.width = 800;
+        canvas.height = 800;
+        document.body.append(canvas);
+        
+        let context = canvas.getContext('2d');
+        for( let i = 1; i< 16; i++) {
+            context.moveTo(50,50*i);
+            context.lineTo(750,50*i);
+            context.stroke()
+
+            context.moveTo(50*i,50);
+            context.lineTo(50*i,750);
+            context.stroke()
+
+        }
+        
+        let isBlack = true;
+
+        // 使用二维数组把所有落点棋子存储起来
+        let circles = [];
+        for(let i = 1; i<16; i++) {
+            circles[i] = [];
+        }
+
+
+        canvas.addEventListener('click', e => {
+            let { offsetX, offsetY } = e;
+
+            // 判断边界
+            if(offsetX < 25 || offsetY < 25 || offsetX > 775 || offsetY > 775) return;
+
+            // 存坐标
+            let i = Math.floor((offsetX + 25) / 50);
+            let j = Math.floor((offsetY + 25) / 50);
+
+            //重复落子提醒
+            if(circles[i][j]) {
+                alert('这里已经有棋子了');
+                return;
+            }
+            let x = i * 50;
+            let y = j * 50;
+            context.beginPath()
+            context.arc(x,y,20,0,2*Math.PI)
+
+            //存储棋子属性到数组 0 为黑， 1 为白
+            circles[i][j] = isBlack? 'black' : 'white';
+            console.log(circles)
+
+            let tx = isBlack? x-10: x+10;
+            let ty = isBlack? y-10: y+10;
+
+            let g = context.createRadialGradient(tx,ty,0,tx,ty,30);
+            g.addColorStop(0,isBlack? ' #ccc':'#888');
+            g.addColorStop(1,isBlack? ' #000':'#fff');
+            context.fillStyle = g;
+            context.fill();
+            context.closePath();
+
+            endGame = checkVertical(i,j) || checkHorizontal(i,j) || checkleft(i,j)|| checkright(i,j);
+            if(endGame) {
+                //阻止继续下棋，重新开棋
+                alert(isBlack?'黑棋获胜':'白棋获胜');
+                alert('点机确定刷新页面，重新开局');
+                history.go(0)
+                return;
+            }
+            isBlack = !isBlack;
+        })
+
+        function checkVertical(row,col) {
+            let up = 0;
+            let down = 0;
+            let times = 0;
+            let count = 1;
+            while(times < 1000) {
+                times++;
+
+                let target = isBlack? 'black': 'white';
+
+                up++
+                if(circles[row][col-up] && circles[row][col-up] === target) {
+                    count++;
+                }
+
+                down++;
+                if(circles[row][col+down] && circles[row][col+down] === target) {
+                    count++;
+                }
+
+                
+                if(count >=5 || (circles[row][col-up] !== target && circles[row][col+down] !== target)) {
+                    break;
+                }
+            }
+            return count >= 5
+        }
+        function checkHorizontal(row,col) {
+            let up = 0;
+            let down = 0;
+            let times = 0;
+            let count = 1;
+            while(times < 1000) {
+                times++;
+
+                let target = isBlack? 'black': 'white';
+
+                up++
+                if(circles[row-up][col] && circles[row-up][col] === target) {
+                    count++;
+                }
+
+                down++;
+                if(circles[row+down][col] && circles[row+down][col] === target) {
+                    count++;
+                }
+
+                
+                if(count >=5 || (circles[row-up][col] !== target && circles[row+down][col] !== target)) {
+                    break;
+                }
+            }
+            return count >= 5
+        }
+        function checkleft(row,col) {
+            let up = 0;
+            let down = 0;
+            let times = 0;
+            let count = 1;
+            while(times < 1000) {
+                times++;
+
+                let target = isBlack? 'black': 'white';
+
+                up++
+                if(circles[row-up][col-up] && circles[row-up][col-up] === target) {
+                    count++;
+                }
+
+                down++;
+                if(circles[row+down][col+down] && circles[row+down][col+down] === target) {
+                    count++;
+                }
+
+                
+                if(count >=5 || (circles[row-up][col-up] !== target && circles[row+down][col+down] !== target)) {
+                    break;
+                }
+            }
+            return count >= 5
+        }
+        function checkright(row,col) {
+            let up = 0;
+            let down = 0;
+            let times = 0;
+            let count = 1;
+            while(times < 1000) {
+                times++;
+
+                let target = isBlack? 'black': 'white';
+
+                up++
+                if(circles[row+up][col+up] && circles[row+up][col+up] === target) {
+                    count++;
+                }
+
+                down++;
+                if(circles[row-down][col-down] && circles[row-down][col-down] === target) {
+                    count++;
+                }
+
+                
+                if(count >=5 || (circles[row+up][col+up] !== target && circles[row-down][col-down] !== target)) {
+                    break;
+                }
+            }
+            return count >= 5
+        }
+    </script>
+</body>
+</html>

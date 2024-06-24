@@ -7,6 +7,20 @@
 </head>
 <body>
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+            margin: auto;
+            text-align: center;
+        }
+        .tips {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #433f3f;
+            display: block;
+            font-size: 28px;
+        }
         canvas {
             background-color: #79797c;
             display: block;
@@ -15,6 +29,12 @@
         }
     </style>
     <script>
+        let Tips = document.createElement('Tips')
+        document.body.append(Tips);
+        Tips.innerHTML = '黑子说话!!!';
+        Tips.className = 'tips';
+
+
         let endGame = false;
         let canvas = document.createElement('canvas')
         canvas.width = 800;
@@ -79,12 +99,15 @@
             endGame = checkVertical(i,j) || checkHorizontal(i,j) || checkleft(i,j)|| checkright(i,j);
             if(endGame) {
                 //阻止继续下棋，重新开棋
-                alert(isBlack?'黑棋获胜':'白棋获胜');
-                alert('点机确定刷新页面，重新开局');
-                history.go(0)
-                return;
+                Tips.innerHTML = isBlack?'黑子赢咯':'白衣赢咯';
+                setTimeout(() => {
+                    alert('点机确定刷新页面，重新开局');
+                    history.go(0)
+                    return;
+                }, 300);
             }
             isBlack = !isBlack;
+            Tips.innerHTML = isBlack?'黑子说话！！！':'等待白衣出手';
         })
 
         function checkVertical(row,col) {

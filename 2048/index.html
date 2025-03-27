@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2048</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #f6d5f7, #fbe9d7);
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #startScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        #startScreen p {
+            font-size: 18px;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #gameContainer {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .score-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-title {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff9a9e;
+        }
+
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: scale(1);
+            animation: appear 0.2s ease-in-out;
+        }
+
+        @keyframes appear {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes merge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .cell.merge {
+            animation: merge 0.2s ease-in-out;
+        }
+
+        .score-change {
+            position: absolute;
+            color: #65B687;
+            font-size: 24px;
+            font-weight: bold;
+            animation: score-pop 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes score-pop {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
+        }
+
+        .cell[data-value="2"] { background: #eee4da; color: #776e65; }
+        .cell[data-value="4"] { background: #ede0c8; color: #776e65; }
+        .cell[data-value="8"] { background: #f2b179; }
+        .cell[data-value="16"] { background: #f59563; }
+        .cell[data-value="32"] { background: #f67c5f; }
+        .cell[data-value="64"] { background: #f65e3b; }
+        .cell[data-value="128"] { background: #edcf72; font-size: 28px; }
+        .cell[data-value="256"] { background: #edcc61; font-size: 28px; }
+        .cell[data-value="512"] { background: #edc850; font-size: 28px; }
+        .cell[data-value="1024"] { background: #edc53f; font-size: 24px; }
+        .cell[data-value="2048"] { background: #edc22e; font-size: 24px; }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .cell {
+                width: 70px;
+                height: 70px;
+                font-size: 24px;
+            }
+
+            .cell[data-value="128"],
+            .cell[data-value="256"],
+            .cell[data-value="512"] {
+                font-size: 20px;
+            }
+
+            .cell[data-value="1024"],
+            .cell[data-value="2048"] {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>2048</h1>
+        <p>使用方向键或滑动来移动方块，相同数字的方块会合并。达到2048就算胜利！</p>
+        <button class="btn" onclick="startGame()">开始游戏</button>
+    </div>
+
+    <div id="gameContainer">
+        <div class="header">
+            <div class="score-container">
+                <div class="score-title">分数</div>
+                <div id="score" class="score">0</div>
+            </div>
+            <div class="score-container">
+                <div class="score-title">最高分</div>
+                <div id="bestScore" class="score">0</div>
+            </div>
+        </div>
+
+        <div id="grid"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="resetGame()">重新开始</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

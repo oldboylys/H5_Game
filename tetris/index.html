@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俄罗斯方块</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #startScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #startScreen p {
+            font-size: 18px;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        #startBtn {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+        }
+
+        #gameContainer {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        #gameArea {
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        #sidePanel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .panel h2 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #00ff00;
+        }
+
+        #nextPiece {
+            width: 120px;
+            height: 120px;
+        }
+
+        #score, #level, #lines {
+            font-size: 24px;
+            margin: 5px 0;
+        }
+
+        #controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #controls p {
+            margin: 5px 0;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>俄罗斯方块</h1>
+        <p>使用方向键或WASD控制方块移动和旋转：<br>
+           ← → 或 A D 左右移动<br>
+           ↑ 或 W 旋转方块<br>
+           ↓ 或 S 加速下落<br>
+           空格键 直接落地</p>
+
+           
+        <button id="startBtn">开始游戏</button>
+    </div>
+
+    <div id="gameContainer">
+        <canvas id="gameArea"></canvas>
+        <div id="sidePanel">
+            <div class="panel">
+                <h2>下一个</h2>
+                <canvas id="nextPiece"></canvas>
+            </div>
+            <div class="panel">
+                <h2>分数</h2>
+                <div id="score">0</div>
+            </div>
+            <div class="panel">
+                <h2>等级</h2>
+                <div id="level">1</div>
+            </div>
+            <div class="panel">
+                <h2>消除行数</h2>
+                <div id="lines">0</div>
+            </div>
+            <div class="panel" id="controls">
+                <h2>控制说明</h2>
+                <p>← → 或 A D 左右移动</p>
+                <p>↑ 或 W 旋转方块</p>
+                <p>↓ 或 S 加速下落</p>
+                <p>空格键 直接落地</p>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

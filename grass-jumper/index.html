@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>玻璃弹珠跳棋</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            backdrop-filter: blur(10px);
+        }
+
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #startScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #00bcd4;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+        }
+
+        #startScreen p {
+            font-size: 18px;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        #startBtn {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: linear-gradient(45deg, #00bcd4, #0097a7);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+        }
+
+        #gameContainer {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        #board {
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 188, 212, 0.6);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+            position: relative;
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #sidePanel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 200px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 188, 212, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel h2 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #00bcd4;
+        }
+
+        #currentPlayer, #gameStatus {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        #controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #controls p {
+            margin: 5px 0;
+            color: #ccc;
+        }
+
+        @media (max-width: 900px) {
+            #gameContainer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #board {
+                width: 90vw;
+                height: 90vw;
+                max-width: 600px;
+                max-height: 600px;
+            }
+
+            #sidePanel {
+                width: 90vw;
+                max-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>玻璃弹珠跳棋</h1>
+        <p>点击弹珠选中，再点击目标位置移动。<br>
+           可以跳过相邻弹珠到达空位。<br>
+           率先将所有弹珠移动到对面的位置获胜。</p>
+        <button id="startBtn">开始游戏</button>
+    </div>
+
+    <div id="gameContainer">
+        <canvas id="board"></canvas>
+        <div id="sidePanel">
+            <div class="panel">
+                <h2>当前玩家</h2>
+                <div id="currentPlayer">玩家1</div>
+            </div>
+            <div class="panel">
+                <h2>游戏状态</h2>
+                <div id="gameStatus">游戏进行中</div>
+            </div>
+            <div class="panel">
+                <h2>得分</h2>
+                <div>玩家1：<span id="player1Score">0</span></div>
+                <div>玩家2：<span id="player2Score">0</span></div>
+            </div>
+            <div class="panel" id="controls">
+                <h2>操作说明</h2>
+                <p>点击选择弹珠</p>
+                <p>点击目标位置移动</p>
+                <p>可以跳过相邻弹珠</p>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

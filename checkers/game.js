@@ -12,6 +12,12 @@ const Player = {
 };
 
 class CheckersGame {
+    // 添加分数记录
+    scores = {
+        [Player.RED]: 0,
+        [Player.BLUE]: 0
+    };
+
     constructor() {
         this.canvas = document.getElementById('board');
         this.ctx = this.canvas.getContext('2d');
@@ -155,6 +161,11 @@ class CheckersGame {
         if (Math.abs(to.row - from.row) === 2) {
             const middleRow = (from.row + to.row) / 2;
             const middleCol = (from.col + to.col) / 2;
+            // 记录得分
+            this.scores[this.currentPlayer]++;
+            // 更新分数显示
+            document.getElementById('redScore').textContent = this.scores[Player.RED];
+            document.getElementById('blueScore').textContent = this.scores[Player.BLUE];
             this.board[middleRow][middleCol] = null;
         }
     }
@@ -197,24 +208,62 @@ class CheckersGame {
                 const x = col * this.cellSize;
                 const y = row * this.cellSize;
 
-                this.ctx.fillStyle = (row + col) % 2 === 0 ? '#4a4a4a' : '#2a2a2a';
+                // 创建水晶效果的渐变背景
+                const gradient = this.ctx.createLinearGradient(x, y, x + this.cellSize, y + this.cellSize);
+                if ((row + col) % 2 === 0) {
+                    gradient.addColorStop(0, 'rgba(74, 74, 74, 0.8)');
+                    gradient.addColorStop(1, 'rgba(74, 74, 74, 0.6)');
+                } else {
+                    gradient.addColorStop(0, 'rgba(42, 42, 42, 0.8)');
+                    gradient.addColorStop(1, 'rgba(42, 42, 42, 0.6)');
+                }
+                
+                this.ctx.fillStyle = gradient;
                 this.ctx.fillRect(x, y, this.cellSize, this.cellSize);
+                
+                // 添加水晶边框效果
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                this.ctx.strokeRect(x, y, this.cellSize, this.cellSize);
 
                 // 绘制棋子
                 if (this.board[row][col]) {
+                    // 绘制水晶风格的棋子
+                    const centerX = x + this.cellSize / 2;
+                    const centerY = y + this.cellSize / 2;
+                    const radius = this.cellSize * 0.4;
+                    
+                    // 创建径向渐变
+                    const gradient = this.ctx.createRadialGradient(
+                        centerX - radius * 0.3, centerY - radius * 0.3, radius * 0.1,
+                        centerX, centerY, radius
+                    );
+                    
+                    if (this.board[row][col] === Player.RED) {
+                        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+                        gradient.addColorStop(0.3, 'rgba(255, 68, 68, 0.8)');
+                        gradient.addColorStop(1, 'rgba(200, 0, 0, 0.6)');
+                    } else {
+                        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+                        gradient.addColorStop(0.3, 'rgba(68, 68, 255, 0.8)');
+                        gradient.addColorStop(1, 'rgba(0, 0, 200, 0.6)');
+                    }
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.fill();
+                    
+                    // 添加高光效果
                     this.ctx.beginPath();
                     this.ctx.arc(
-                        x + this.cellSize / 2,
-                        y + this.cellSize / 2,
-                        this.cellSize * 0.4,
+                        centerX - radius * 0.3,
+                        centerY - radius * 0.3,
+                        radius * 0.2,
                         0,
                         Math.PI * 2
                     );
-                    this.ctx.fillStyle = this.board[row][col] === Player.RED ? '#ff4444' : '#4444ff';
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                     this.ctx.fill();
-                    this.ctx.strokeStyle = '#fff';
-                    this.ctx.lineWidth = 2;
-                    this.ctx.stroke();
                 }
             }
         }

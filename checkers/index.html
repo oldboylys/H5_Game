@@ -21,6 +21,7 @@
             background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
             color: #fff;
             font-family: Arial, sans-serif;
+            backdrop-filter: blur(10px);
         }
 
         #startScreen {
@@ -79,10 +80,13 @@
         #board {
             width: 600px;
             height: 600px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #4CAF50;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(76, 175, 80, 0.6);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
             position: relative;
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         #sidePanel {
@@ -93,10 +97,12 @@
         }
 
         .panel {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #4CAF50;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(76, 175, 80, 0.6);
             padding: 15px;
             border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .panel h2 {
@@ -159,6 +165,11 @@
             <div class="panel">
                 <h2>游戏状态</h2>
                 <div id="gameStatus">游戏进行中</div>
+            </div>
+            <div class="panel">
+                <h2>得分</h2>
+                <div>红方：<span id="redScore">0</span></div>
+                <div>蓝方：<span id="blueScore">0</span></div>
             </div>
             <div class="panel" id="controls">
                 <h2>操作说明</h2>

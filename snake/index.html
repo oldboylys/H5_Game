@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>贪吃蛇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1c20 0%, #2d3436 100%);
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+        }
+        #startScreen h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #4CAF50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        #startScreen p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        #startBtn {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        #startBtn:hover {
+            transform: scale(1.05);
+            background: #45a049;
+        }
+        #gameContainer {
+            position: relative;
+            margin: 20px auto;
+        }
+        #gameCanvas {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+        }
+        #score {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        #controls {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 300px;
+            height: 100px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(76, 175, 80, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .control-btn:active {
+            transform: scale(0.95);
+            background-color: rgba(76, 175, 80, 1);
+        }
+        #leftControls, #rightControls {
+            display: none;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+        }
+        #leftControls { left: 20px; }
+        #rightControls { right: 20px; }
+        @media (max-width: 768px) {
+            #leftControls, #rightControls { display: block; }
+            .control-btn {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>贪吃蛇大作战</h1>
+        <p>使用方向键或触摸屏控制贪吃蛇移动，吃到食物可以增加长度和分数。注意不要撞到墙壁或自己的身体！</p>
+        <button id="startBtn">开始游戏</button>
+    </div>
+    <div id="score">分数: 0</div>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="leftControls">
+            <button class="control-btn" id="leftBtn">←</button>
+            <button class="control-btn" id="upBtn">↑</button>
+        </div>
+        <div id="rightControls">
+            <button class="control-btn" id="downBtn">↓</button>
+            <button class="control-btn" id="rightBtn">→</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 // 游戏配置
 const CARD_TYPES = ['image/jiyi.jpeg', 'image/jiyi2.jpeg', 'image/jiyi3.jpeg', 'image/xiaoba.jpeg', 'image/537.jpg'];
 
-const CARD_TYPES2 = ['image/37.jpg', 'image/lh.jpg', 'image/lh2.jpg', 'image/sgz.jpg', 'image/wq.jpg', 'image/wq2.jpg'];
+const CARD_TYPES2 = ['image/37.jpg', 'image/lh.jpg', 'image/lh2.jpg', 'image/sgz.jpg', 'image/wq.png', 'image/wq2.jpg'];
 const CARDS_PER_LEVEL = 24; // 每关卡片数量（必须是3的倍数）
 const MAX_LAYERS = 3; // 最大堆叠层数
 
@@ -218,3 +218,15 @@ function startGame(cardTypes) {
 // 初始化事件监听
 document.getElementById('chiikawaSeries').addEventListener('click', () => startGame(CARD_TYPES));
 document.getElementById('friendsSeries').addEventListener('click', () => startGame(CARD_TYPES2));
+document.getElementById('backBtn').addEventListener('click', () => {
+    // 重置游戏状态
+    gameStarted = false;
+    currentLevel = 1;
+    selectedCards = [];
+    cards = [];
+    remainingCards = 0;
+    
+    // 切换界面显示
+    document.getElementById('startScreen').style.display = 'flex';
+    document.getElementById('gameContainer').style.display = 'none';
+});
